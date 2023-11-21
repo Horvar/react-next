@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './Results.module.css';
-
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 import { Person } from '../../types';
 
@@ -10,15 +9,14 @@ type ResultsProps = {
   onItemSelected: (person: Person) => void;
 };
 
-const Results: React.FC<ResultsProps> = ({ data }) => {
-  const navigate = useNavigate();
-
-  const [searchParams] = useSearchParams();
-  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+const Results: React.FC<ResultsProps> = ({ data, onItemSelected }) => {
+  const router = useRouter();
+  const currentPage = parseInt(router.query.page as string) || 1;
 
   const handleItemClick = (person: Person) => {
     const personId = person.url.split('/').slice(-2, -1)[0];
-    navigate(`/details/${personId}?page=${currentPage}`);
+    router.push(`/details/${personId}?page=${currentPage}`);
+    onItemSelected(person);
   };
 
   if (data.length === 0) {

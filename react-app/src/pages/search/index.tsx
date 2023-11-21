@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import { useFetchPeopleQuery } from '../../features/api/apiSlice';
 import {
   setSearchTerm,
@@ -13,16 +13,14 @@ import Results from '../../components/Results';
 import Pagination from '../../components/Pagination';
 import { Person } from '../../types';
 import { RootState } from '../../store';
-import { Outlet } from 'react-router-dom';
 
-const SearchPage: React.FC = () => {
-  const navigate = useNavigate();
+const SearchPage: FC = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const currentPage = useSelector(
     (state: RootState) => state.search.currentPage
   );
   const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const { data, error, isLoading } = useFetchPeopleQuery({
     searchTerm,
@@ -32,8 +30,12 @@ const SearchPage: React.FC = () => {
   useEffect(() => {
     dispatch(setMainPageLoading(isLoading));
 
-    const urlSearchTerm = searchParams.get('search') || '';
-    const page = parseInt(searchParams.get('page') || '1', 10);
+    const urlSearchTerm =
+      typeof router.query.search === 'string' ? router.query.search : '';
+    const page =
+      typeof router.query.page === 'string'
+        ? parseInt(router.query.page, 10)
+        : 1;
 
     if (urlSearchTerm !== searchTerm) {
       dispatch(setSearchTerm(urlSearchTerm));
@@ -41,57 +43,53 @@ const SearchPage: React.FC = () => {
     if (page !== currentPage) {
       dispatch(setCurrentPage(page));
     }
-  }, [searchParams, searchTerm, currentPage, dispatch, isLoading]);
+  }, [router.query, searchTerm, currentPage, dispatch, isLoading]);
 
   const handleSearch = (term: string) => {
     dispatch(setSearchTerm(term));
-    setSearchParams({ search: term, page: '1' });
+    router.push(`/?search=${term}&page=1`);
   };
 
   const handlePaginate = (page: number) => {
     dispatch(setCurrentPage(page));
-    setSearchParams({ search: searchTerm, page: page.toString() });
+    router.push(`/?search=${searchTerm}&page=${page}`);
   };
 
   const openDetails = (person: Person) => {
     const personId = person.url.split('/').slice(-2, -1)[0];
-    navigate(`/details/${personId}`);
+    router.push(`/details/${personId}`);
   };
 
   return (
-    <>
-      <div className={styles.searchPage}>
-        <div className={styles.searchPageRowSearch}>
-          <SearchBar onSearch={handleSearch} />
-        </div>
-
-        {error && (
-          <div className={styles.searchPageRowSearch}>
-            <div className={styles.error}>
-              An error has occurred. Please try again later.
-            </div>
-          </div>
-        )}
-
-        <div className={styles.searchPageRowResult}>
-          {isLoading ? (
-            <div className={styles.loader}>Loading...</div>
-          ) : (
-            <Results data={data?.results || []} onItemSelected={openDetails} />
-          )}
-        </div>
-
-        <div className={styles.searchPageRowControls}>
-          <Pagination
-            total={data?.count || 0}
-            currentPage={parseInt(searchParams.get('page') || '1', 10)}
-            onPaginate={handlePaginate}
-          />
-        </div>
+    <div className={styles.searchPage}>
+      <div className={styles.searchPageRowSearch}>
+        <SearchBar onSearch={handleSearch} />
       </div>
 
-      <Outlet />
-    </>
+      {error && (
+        <div className={styles.searchPageRowSearch}>
+          <div className={styles.error}>
+            An error has occurred. Please try again later.
+          </div>
+        </div>
+      )}
+
+      <div className={styles.searchPageRowResult}>
+        {isLoading ? (
+          <div className={styles.loader}>Loading...</div>
+        ) : (
+          <Results data={data?.results || []} onItemSelected={openDetails} />
+        )}
+      </div>
+
+      <div className={styles.searchPageRowControls}>
+        <Pagination
+          total={data?.count || 0}
+          currentPage={currentPage}
+          onPaginate={handlePaginate}
+        />
+      </div>
+    </div>
   );
 };
 

@@ -10,10 +10,10 @@ module.exports = {
     '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
   },
   collectCoverage: true,
-  coverageReporters: ["text", "lcov"],
+  coverageReporters: ['text', 'lcov'],
   collectCoverageFrom: [
-    "**/*.{js,jsx,ts,tsx}",
-    "!**/node_modules/**",
-    "!**/vendor/**"
-  ]
+    '**/*.{js,jsx,ts,tsx}',
+    '!**/node_modules/**',
+    '!**/vendor/**',
+  ],
 };

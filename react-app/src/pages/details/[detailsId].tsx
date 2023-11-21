@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDetailsPageLoading } from '../../features/loading/loadingSlice';
 import { RootState } from '../../store';
@@ -8,19 +8,22 @@ import styles from './Details.module.css';
 import { Person } from '../../types';
 
 const DetailPage = () => {
-  const { detailsId } = useParams();
+  const router = useRouter();
+  const { detailsId } = router.query;
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const isLoading = useSelector(
     (state: RootState) => state.loading.detailsPageLoading
   );
+  const [person, setPerson] = useState<Person | null>(null);
 
   const closeDetails = () => {
-    navigate(-1);
+    router.push('/');
   };
 
   useEffect(() => {
+    if (!detailsId || Array.isArray(detailsId)) return;
+
     const fetchDetails = async () => {
       dispatch(setDetailsPageLoading(true));
 
@@ -32,15 +35,13 @@ const DetailPage = () => {
         setPerson(data);
       } catch (error) {
         console.error('Error fetching details:', error);
+      } finally {
+        dispatch(setDetailsPageLoading(false));
       }
-
-      dispatch(setDetailsPageLoading(false));
     };
 
     fetchDetails();
   }, [detailsId, dispatch]);
-
-  const [person, setPerson] = useState<Person | null>(null);
 
   if (isLoading) {
     return (

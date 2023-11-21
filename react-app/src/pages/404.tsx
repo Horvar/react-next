@@ -1,26 +1,24 @@
 import React from 'react';
 import styles from './404.module.css';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 const NotFoundPage = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleReturnClick = () => {
-    navigate('/', { state: { fromNotFound: true } });
+    router.push('/');
   };
 
   return (
-    <>
-      <div className={styles.notFound}>
-        <div className={styles.notFoundWrapper}>
-          <div className={styles.notFoundError}>404</div>
-          <h1 className={styles.notFoundTitle}>Page Not Found</h1>
-          <button onClick={handleReturnClick} className={styles.notFoundButton}>
-            Return
-          </button>
-        </div>
+    <div className={styles.notFound}>
+      <div className={styles.notFoundWrapper}>
+        <div className={styles.notFoundError}>404</div>
+        <h1 className={styles.notFoundTitle}>Page Not Found</h1>
+        <button onClick={handleReturnClick} className={styles.notFoundButton}>
+          Return
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 

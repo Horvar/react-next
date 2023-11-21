@@ -1,18 +1,15 @@
 import React, { useEffect, FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { useFetchPeopleQuery } from '../../features/api/apiSlice';
-import {
-  setSearchTerm,
-  setCurrentPage,
-} from '../../features/search/searchSlice';
-import { setMainPageLoading } from '../../features/loading/loadingSlice';
+import { useFetchPeopleQuery } from '../features/api/apiSlice';
+import { setSearchTerm, setCurrentPage } from '../features/search/searchSlice';
+import { setMainPageLoading } from '../features/loading/loadingSlice';
 import styles from './Search.module.css';
-import SearchBar from '../../components/SearchBar';
-import Results from '../../components/Results';
-import Pagination from '../../components/Pagination';
-import { Person } from '../../types';
-import { RootState } from '../../store';
+import SearchBar from '../components/SearchBar';
+import Results from '../components/Results';
+import Pagination from '../components/Pagination';
+import { Person } from '../types';
+import { RootState } from '../store';
 
 const SearchPage: FC = () => {
   const router = useRouter();

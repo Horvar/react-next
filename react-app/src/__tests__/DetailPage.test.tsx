@@ -9,7 +9,7 @@ import {
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import DetailPage from '../pages/DetailPage';
+import DetailPage from '../pages/details';
 import { store } from '../store';
 
 const mockNavigate = jest.fn();

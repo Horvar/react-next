@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDetailsPageLoading } from '../../features/loading/loadingSlice';
 import { RootState } from '../../store';
-import styles from './DetailPage.module.css';
+import styles from './Details.module.css';
 
 import { Person } from '../../types';
 

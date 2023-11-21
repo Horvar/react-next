@@ -7,7 +7,7 @@ import {
   setCurrentPage,
 } from '../../features/search/searchSlice';
 import { setMainPageLoading } from '../../features/loading/loadingSlice';
-import styles from './SearchPage.module.css';
+import styles from './Search.module.css';
 import SearchBar from '../../components/SearchBar';
 import Results from '../../components/Results';
 import Pagination from '../../components/Pagination';

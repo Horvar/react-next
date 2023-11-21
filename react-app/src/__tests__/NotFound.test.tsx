@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import NotFoundPage from '../pages/NotFoundPage';
+import NotFoundPage from '../pages/404';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 

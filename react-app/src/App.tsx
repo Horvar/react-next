@@ -5,10 +5,10 @@ import SearchProvider from './context/searchContext';
 import { Provider } from 'react-redux';
 import { store } from './store';
 
-import SearchPage from './pages/SearchPage';
-import DetailPage from './pages/DetailPage';
+import SearchPage from './pages/search';
+import DetailPage from './pages/details/[detailsId]';
 import ErrorBoundary from './components/ErrorBoundary';
-import NotFoundPage from './pages/NotFoundPage';
+import NotFoundPage from './pages/404';
 
 import { Routes, Route } from 'react-router-dom';
 

@@ -11,7 +11,7 @@ const DetailPage = ({
   personProp,
   onClose,
 }: {
-  personProp: Person;
+  personProp: Person | null;
   onClose: () => void;
 }) => {
   const router = useRouter();
@@ -70,7 +70,11 @@ const DetailPage = ({
         <div className={styles.detailsModal}>
           {personToShow ? (
             <>
-              <button className={styles.detailsClose} onClick={onClose}>
+              <button
+                data-testid="close-button"
+                className={styles.detailsClose}
+                onClick={onClose}
+              >
                 Close
               </button>
               <h2 className={styles.detailsTitle}>{personToShow.name}</h2>

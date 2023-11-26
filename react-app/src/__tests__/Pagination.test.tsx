@@ -1,36 +1,36 @@
-// import { render, screen, waitFor } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
-// import { MemoryRouter, Route, Routes } from 'react-router-dom';
-// import Pagination from '../components/Pagination';
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import Pagination from '../components/Pagination';
 
-// describe('Pagination Component', () => {
-//   test('updates URL query parameter when page changes', async () => {
-//     const mockOnPaginate = jest.fn();
-//     const totalItems = 50;
-//     const currentPage = 1;
+describe('Pagination Component Tests', () => {
+  it('renders correctly with default props', () => {
+    const { getByText } = render(
+      <Pagination total={50} currentPage={1} onPaginate={() => {}} />
+    );
+    expect(getByText('1')).toBeInTheDocument();
+    // Другие проверки рендеринга...
+  });
 
-//     render(
-//       <MemoryRouter initialEntries={['/test?page=1']}>
-//         <Routes>
-//           <Route
-//             path="/test"
-//             element={
-//               <Pagination
-//                 total={totalItems}
-//                 currentPage={currentPage}
-//                 onPaginate={mockOnPaginate}
-//               />
-//             }
-//           />
-//         </Routes>
-//       </MemoryRouter>
-//     );
+  it('correctly highlights the active page', () => {
+    const currentPage = 3;
+    const { getByText } = render(
+      <Pagination total={50} currentPage={currentPage} onPaginate={() => {}} />
+    );
+    const activePageButton = getByText(currentPage.toString());
+    expect(activePageButton).toHaveClass('active'); // Предполагается, что у активной кнопки есть класс 'active'
+    // Другие проверки активной страницы...
+  });
 
-//     const secondPageButton = await screen.findByText('2');
-//     userEvent.click(secondPageButton);
+  it('calls onPaginate with correct page number', () => {
+    const mockOnPaginate = jest.fn();
+    const { getByText } = render(
+      <Pagination total={50} currentPage={1} onPaginate={mockOnPaginate} />
+    );
+    const pageButton = getByText('2');
+    fireEvent.click(pageButton);
+    expect(mockOnPaginate).toHaveBeenCalledWith(2);
+    // Другие проверки обработки событий...
+  });
 
-//     await waitFor(() => {
-//       expect(mockOnPaginate).toHaveBeenCalledWith(2);
-//     });
-//   });
-// });
+  // Дополнительные тесты для граничных условий, разных пропсов и snapshot-тестирования...
+});

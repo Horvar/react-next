@@ -1,55 +1,43 @@
-// import React from 'react';
-// import { render, screen, fireEvent } from '@testing-library/react';
-// import '@testing-library/jest-dom';
-// import SearchBar from '../components/SearchBar';
+import React from 'react';
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import SearchBar from '../components/SearchBar';
 
-// describe('SearchBar Component', () => {
-//   test('renders search input and button', () => {
-//     render(<SearchBar onSearch={() => {}} />);
-//     expect(screen.getByPlaceholderText('Search')).toBeInTheDocument();
-//     expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
-//   });
+describe('SearchBar Component', () => {
+  test('should render input element', () => {
+    render(<SearchBar onSearch={() => {}} />);
+    const inputElement = screen.getByPlaceholderText(/search/i);
+    expect(inputElement).toBeInTheDocument();
+  });
 
-//   test('allows typing in search input', () => {
-//     render(<SearchBar onSearch={() => {}} />);
-//     const input = screen.getByPlaceholderText('Search') as HTMLInputElement;
-//     fireEvent.change(input, { target: { value: 'Luke Skywalker' } });
-//     expect(input.value).toBe('Luke Skywalker');
-//   });
+  test('should allow typing in search input', () => {
+    render(<SearchBar onSearch={() => {}} />);
+    const inputElement = screen.getByPlaceholderText(
+      /search/i
+    ) as HTMLInputElement;
+    fireEvent.change(inputElement, { target: { value: 'Luke Skywalker' } });
+    expect(inputElement.value).toBe('Luke Skywalker');
+  });
 
-//   test('trims input value on search', () => {
-//     const mockOnSearch = jest.fn();
-//     render(<SearchBar onSearch={mockOnSearch} />);
-//     const input = screen.getByPlaceholderText('Search');
-//     const button = screen.getByRole('button', { name: /search/i });
+  test('should trigger onSearch when search button is clicked', () => {
+    const mockOnSearch = jest.fn();
+    render(<SearchBar onSearch={mockOnSearch} />);
+    const inputElement = screen.getByPlaceholderText(/search/i);
+    const buttonElement = screen.getByRole('button', { name: /search/i });
 
-//     fireEvent.change(input, { target: { value: '  Yoda  ' } });
-//     fireEvent.click(button);
+    fireEvent.change(inputElement, { target: { value: 'Yoda' } });
+    fireEvent.click(buttonElement);
 
-//     expect(mockOnSearch).toHaveBeenCalledWith('Yoda');
-//   });
+    expect(mockOnSearch).toHaveBeenCalledWith('Yoda');
+  });
 
-//   test('triggers onSearch prop function with empty input', () => {
-//     const mockOnSearch = jest.fn();
-//     render(<SearchBar onSearch={mockOnSearch} />);
-//     const input = screen.getByPlaceholderText('Search');
-//     const button = screen.getByRole('button', { name: /search/i });
+  test('should trigger onSearch with empty input when search button is clicked', () => {
+    const mockOnSearch = jest.fn();
+    render(<SearchBar onSearch={mockOnSearch} />);
+    const buttonElement = screen.getByRole('button', { name: /search/i });
 
-//     fireEvent.change(input, { target: { value: '   ' } });
-//     fireEvent.click(button);
+    fireEvent.click(buttonElement);
 
-//     expect(mockOnSearch).toHaveBeenCalledWith('');
-//   });
-
-//   test('triggers onSearch prop function when search button is clicked', () => {
-//     const mockOnSearch = jest.fn();
-//     render(<SearchBar onSearch={mockOnSearch} />);
-//     const input = screen.getByPlaceholderText('Search');
-//     const button = screen.getByRole('button', { name: /search/i });
-
-//     fireEvent.change(input, { target: { value: 'Darth Vader' } });
-//     fireEvent.click(button);
-
-//     expect(mockOnSearch).toHaveBeenCalledWith('Darth Vader');
-//   });
-// });
+    expect(mockOnSearch).toHaveBeenCalledWith('');
+  });
+});

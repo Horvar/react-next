@@ -1,37 +1,32 @@
-// import { render, screen, fireEvent } from '@testing-library/react';
-// import NotFoundPage from '../pages/404';
-// import '@testing-library/jest-dom';
-// import { MemoryRouter } from 'react-router-dom';
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import NotFoundPage from '../pages/404';
 
-// const mockNavigate = jest.fn();
-// jest.mock('react-router-dom', () => ({
-//   ...jest.requireActual('react-router-dom'),
-//   useNavigate: () => mockNavigate,
-// }));
+const mockRouterPush = jest.fn();
 
-// describe('NotFoundPage Component', () => {
-//   it('displays the 404 page', () => {
-//     render(
-//       <MemoryRouter>
-//         <NotFoundPage />
-//       </MemoryRouter>
-//     );
+jest.mock('next/router', () => ({
+  ...jest.requireActual('next/router'),
+  useRouter: () => ({
+    push: mockRouterPush,
+  }),
+}));
 
-//     expect(screen.getByText('404')).toBeInTheDocument();
-//     expect(screen.getByText('Page Not Found')).toBeInTheDocument();
-//     expect(screen.getByRole('button', { name: 'Return' })).toBeInTheDocument();
-//   });
+describe('NotFoundPage', () => {
+  beforeEach(() => {
+    mockRouterPush.mockClear();
+  });
 
-//   it('navigates to home page on return button click', () => {
-//     render(
-//       <MemoryRouter>
-//         <NotFoundPage />
-//       </MemoryRouter>
-//     );
+  it('should render NotFoundPage component', () => {
+    render(<NotFoundPage />);
+    expect(screen.getByText('404')).toBeInTheDocument();
+    expect(screen.getByText('Page Not Found')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Return' })).toBeInTheDocument();
+  });
 
-//     fireEvent.click(screen.getByRole('button', { name: 'Return' }));
-//     expect(mockNavigate).toHaveBeenCalledWith('/', {
-//       state: { fromNotFound: true },
-//     });
-//   });
-// });
+  it('should navigate to home page on button click', () => {
+    render(<NotFoundPage />);
+    fireEvent.click(screen.getByRole('button', { name: 'Return' }));
+    expect(mockRouterPush).toHaveBeenCalledWith('/');
+  });
+});

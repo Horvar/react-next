@@ -1,4 +1,4 @@
-import React, { useEffect, FC } from 'react';
+import React, { useEffect, useState, FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useFetchPeopleQuery } from '../features/api/apiSlice';
@@ -10,6 +10,7 @@ import Results from '../components/Results';
 import Pagination from '../components/Pagination';
 import { Person } from '../types';
 import { RootState } from '../store';
+import DetailPage from '../components/DetailPage/DetailPage';
 
 const SearchPage: FC = () => {
   const router = useRouter();
@@ -23,6 +24,8 @@ const SearchPage: FC = () => {
     searchTerm,
     page: currentPage,
   });
+
+  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
 
   useEffect(() => {
     dispatch(setMainPageLoading(isLoading));
@@ -53,8 +56,7 @@ const SearchPage: FC = () => {
   };
 
   const openDetails = (person: Person) => {
-    const personId = person.url.split('/').slice(-2, -1)[0];
-    router.push(`/details/${personId}`);
+    setSelectedPerson(person);
   };
 
   return (
@@ -86,6 +88,13 @@ const SearchPage: FC = () => {
           onPaginate={handlePaginate}
         />
       </div>
+
+      {selectedPerson && (
+        <DetailPage
+          personProp={selectedPerson}
+          onClose={() => setSelectedPerson(null)}
+        />
+      )}
     </div>
   );
 };

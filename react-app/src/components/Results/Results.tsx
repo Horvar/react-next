@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './Results.module.css';
-import { useRouter } from 'next/router';
 
 import { Person } from '../../types';
 
@@ -10,12 +9,7 @@ type ResultsProps = {
 };
 
 const Results: React.FC<ResultsProps> = ({ data, onItemSelected }) => {
-  const router = useRouter();
-  const currentPage = parseInt(router.query.page as string) || 1;
-
   const handleItemClick = (person: Person) => {
-    const personId = person.url.split('/').slice(-2, -1)[0];
-    router.push(`/details/${personId}?page=${currentPage}`);
     onItemSelected(person);
   };
 

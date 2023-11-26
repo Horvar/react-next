@@ -7,7 +7,13 @@ import styles from './Details.module.css';
 
 import { Person } from '../../types';
 
-const DetailPage = () => {
+const DetailPage = ({
+  personProp,
+  onClose,
+}: {
+  personProp: Person;
+  onClose: () => void;
+}) => {
   const router = useRouter();
   const { detailsId } = router.query;
   const dispatch = useDispatch();
@@ -15,14 +21,17 @@ const DetailPage = () => {
   const isLoading = useSelector(
     (state: RootState) => state.loading.detailsPageLoading
   );
-  const [person, setPerson] = useState<Person | null>(null);
+
+  const [personState, setPersonState] = useState<Person | null>(null);
+
+  const personToShow = personProp || personState;
 
   const closeDetails = () => {
-    router.push('/');
+    onClose?.();
   };
 
   useEffect(() => {
-    if (!detailsId || Array.isArray(detailsId)) return;
+    if (personProp || !detailsId || Array.isArray(detailsId)) return;
 
     const fetchDetails = async () => {
       dispatch(setDetailsPageLoading(true));
@@ -32,7 +41,7 @@ const DetailPage = () => {
           `https://swapi.dev/api/people/${detailsId}`
         );
         const data = await response.json();
-        setPerson(data);
+        setPersonState(data);
       } catch (error) {
         console.error('Error fetching details:', error);
       } finally {
@@ -41,7 +50,7 @@ const DetailPage = () => {
     };
 
     fetchDetails();
-  }, [detailsId, dispatch]);
+  }, [detailsId, personProp, dispatch]);
 
   if (isLoading) {
     return (
@@ -59,46 +68,46 @@ const DetailPage = () => {
       <>
         <div className={styles.detailsOverlay} onClick={closeDetails}></div>
         <div className={styles.detailsModal}>
-          {person ? (
+          {personToShow ? (
             <>
-              <button className={styles.detailsClose} onClick={closeDetails}>
+              <button className={styles.detailsClose} onClick={onClose}>
                 Close
               </button>
-              <h2 className={styles.detailsTitle}>{person.name}</h2>
+              <h2 className={styles.detailsTitle}>{personToShow.name}</h2>
               <div className={styles.detailsData}>
                 <span>Gender: </span>
                 <span>
-                  <b>{person.gender}</b>
+                  <b>{personToShow.gender}</b>
                 </span>
               </div>
               <div className={styles.detailsData}>
                 <span>Height: </span>
                 <span>
-                  <b>{person.height}</b>
+                  <b>{personToShow.height}</b>
                 </span>
               </div>
               <div className={styles.detailsData}>
                 <span>Mass: </span>
                 <span>
-                  <b>{person.mass}</b>
+                  <b>{personToShow.mass}</b>
                 </span>
               </div>
               <div className={styles.detailsData}>
                 <span>Hair color: </span>
                 <span>
-                  <b>{person.hair_color}</b>
+                  <b>{personToShow.hair_color}</b>
                 </span>
               </div>
               <div className={styles.detailsData}>
                 <span>Eye color: </span>
                 <span>
-                  <b>{person.eye_color}</b>
+                  <b>{personToShow.eye_color}</b>
                 </span>
               </div>
               <div className={styles.detailsData}>
                 <span>Skin color: </span>
                 <span>
-                  <b>{person.skin_color}</b>
+                  <b>{personToShow.skin_color}</b>
                 </span>
               </div>
             </>

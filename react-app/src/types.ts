@@ -7,4 +7,5 @@ export type Person = {
   skin_color: string;
   eye_color: string;
   hair_color: string;
+  id: string;
 };

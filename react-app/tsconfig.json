@@ -1,8 +1,17 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "types": ["next", "next/types/global", "jest"],
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": [
+      "next",
+      "next/types/global",
+      "jest",
+      "@testing-library/jest-dom"
+    ],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -16,14 +25,18 @@
     "isolatedModules": true,
     "noImplicitAny": true,
     "noEmit": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "incremental": true
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ],
   "references": [
     {
       "path": "./tsconfig.node.json"
     }
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

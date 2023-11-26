@@ -9,7 +9,7 @@ module.exports = {
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
   },
-  collectCoverage: true,
+  collectCoverage: false,
   coverageReporters: ['text', 'lcov'],
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',
